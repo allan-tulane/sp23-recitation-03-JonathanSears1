@@ -43,23 +43,54 @@ def pad(x,y):
         x = ['0'] + x
         y = ['0'] + y
     return x,y
-
 def quadratic_multiply(x, y):
     ### TODO
-    pass
-    ###
+	def _quadratic_multiply(x,y):
+		x_vec, y_vec = pad(x.binary_vec, y.binary_vec)
 
+		x_left, x_right = split_number(x_vec)
+		y_left, y_right = split_number(y_vec)
 
+		# print("x decimal: {} \ny decimal: {}".format(x.decimal_val, y.decimal_val))
+		# print("x left: {}\nx right: {}\ny left: {}\ny right: {}\n".format(x_left, x_right, y_left,y_right))
+
+		
+		if (x.decimal_val == 0) or (y.decimal_val == 0):
+			# print("0")
+			return BinaryNumber(0)
+		if (x.decimal_val == 1) and (y.decimal_val == 1):
+			# print("1")
+			return BinaryNumber(1)
+		
+		else:
+			Product1 = _quadratic_multiply(x_left,y_left)
+			Product1 = bit_shift(Product1,len(x_vec))
+			Product2 = _quadratic_multiply(x_left,y_right)
+			Product2 = bit_shift(Product2,len(x_vec)//2)
+			Product3 = _quadratic_multiply(x_right,y_left)
+			Product3 = bit_shift(Product3,len(x_vec)//2)
+			Product4 = _quadratic_multiply(x_right,y_right)
+			return BinaryNumber(Product1.decimal_val + Product2.decimal_val + Product3.decimal_val + Product4.decimal_val)
+	return _quadratic_multiply(x,y).decimal_val
+	
+		
+
+print(quadratic_multiply(BinaryNumber(7),BinaryNumber(3)))
 
 ## Feel free to add your own tests here.
 def test_multiply():
-    assert quadratic_multiply(BinaryNumber(2), BinaryNumber(2)) == 2*2
+		assert quadratic_multiply(BinaryNumber(2), BinaryNumber(2)) == 2*2
+		assert quadratic_multiply(BinaryNumber(5),BinaryNumber(6)) == 5*6
+		assert quadratic_multiply(BinaryNumber(1234),BinaryNumber(5678)) == 1234 * 5678
     
     
 def time_multiply(x, y, f):
-    start = time.time()
-    # multiply two numbers x, y using function f
-    return (time.time() - start)*1000
+		start = time.time()
+		f(x,y)
+		# multiply two numbers x, y using function f
+		return (time.time() - start)*1000
+
+# print(time_multiply(BinaryNumber(1234), BinaryNumber(5678), quadratic_multiply))
 
 
     

@@ -21,6 +21,7 @@ First, we'll define our entry point, which calls a helper function `_quadratic_m
 ```python
 def quadratic_multiply(x, y):
     # this just converts the result from a BinaryNumber to a regular int
+	x_bin = 
     return _quadratic_multiply(x,y).decimal_val
 ```
 
